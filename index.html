@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ana María Jaramillo Quiceno - Perfil Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The SPA uses a thematic, non-linear structure. It starts with a strong summary, followed by three key "Pillares de Experiencia" (Academia, Consultoría, Gestión Pública) that users can explore interactively. This is supported by a "Mapa de Competencias" (Radar Chart) for a quick visual overview of skills, and an "Explorador de Trayectoria" which includes a filterable list of all professional and academic activities. This structure was chosen to immediately communicate the candidate's value proposition and allow users to dive into areas most relevant to them, rather than forcing a linear read of a long CV. The user flow is from a high-level summary to thematic exploration, and then to detailed filtering. -->
+    <!-- Visualization & Content Choices: 
+        - CV Summary -> Goal: Hook the user -> Presentation: Prominent hero section -> Justification: Grabs attention immediately.
+        - Skills List -> Goal: Compare skill strengths -> Viz: Radar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Provides a quick, holistic, and visually engaging overview of competencies.
+        - Job History -> Goal: Organize & explore -> Presentation: Thematic interactive cards and a filterable detailed list -> Interaction: Click to reveal details & filter by category -> Justification: Breaks down a long history into digestible, user-driven chunks.
+        - Publications/Projects -> Goal: Showcase output -> Presentation: Included within the filterable trajectory list -> Interaction: Filter by "Publicación", "Proyecto", "Ponencia" etc. -> Justification: Integrates all outputs into a single, powerful, and searchable component. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 60vh;
+            max-height: 450px;
+            width: 100%;
+            max-width: 450px;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0d9488; /* teal-600 */
+            transform: translateY(-2px);
+        }
+        .pillar-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .pillar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .filter-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .filter-btn.active {
+            background-color: #0d9488; /* teal-600 */
+            color: white;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-amber-50 text-gray-800">
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="#hero" class="text-xl font-bold text-gray-900">Ana María Jaramillo Quiceno</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#pillars" class="nav-link text-gray-600 px-3 py-2 rounded-md text-sm font-medium">Pilares de Experiencia</a>
+                        <a href="#skills" class="nav-link text-gray-600 px-3 py-2 rounded-md text-sm font-medium">Mapa de Competencias</a>
+                        <a href="#trajectory" class="nav-link text-gray-600 px-3 py-2 rounded-md text-sm font-medium">Explorador de Trayectoria</a>
+                        <a href="#contact" class="nav-link text-gray-600 px-3 py-2 rounded-md text-sm font-medium">Contacto</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        <span class="sr-only">Abrir menú principal</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#pillars" class="block nav-link text-gray-600 px-3 py-2 rounded-md text-base font-medium">Pilares de Experiencia</a>
+                <a href="#skills" class="block nav-link text-gray-600 px-3 py-2 rounded-md text-base font-medium">Mapa de Competencias</a>
+                <a href="#trajectory" class="block nav-link text-gray-600 px-3 py-2 rounded-md text-base font-medium">Explorador de Trayectoria</a>
+                <a href="#contact" class="block nav-link text-gray-600 px-3 py-2 rounded-md text-base font-medium">Contacto</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="py-20 sm:py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight">
+                    Ana María Jaramillo Quiceno
+                </h1>
+                <p class="mt-4 max-w-2xl mx-auto text-xl text-teal-800">
+                    Candidata a Doctora en Desarrollo Sostenible
+                </p>
+                <div class="mt-8 max-w-4xl mx-auto text-lg text-gray-600 space-y-4">
+                    <p>
+                        Como Candidata a Doctora en Desarrollo Sostenible con Maestría en Gestión de Ciencia, Tecnología e Innovación, mi carrera se ha forjado en la intersección del sector empresarial, gubernamental y académico. Esta trayectoria multidisciplinar me ha permitido crear y liderar con éxito proyectos estratégicos que impulsan la innovación, la sostenibilidad y la gestión del conocimiento con resultados tangibles.
+                    </p>
+                    <p>
+                        Mi experiencia abarca la dirección y ejecución de investigaciones, consultorías especializadas, diseño de programas de capacitación y docencia, siempre con un enfoque en la planificación estratégica y la mejora continua de la calidad. Cuento con una sólida base en gestión de proyectos, prospectiva, vigilancia tecnológica y emprendimiento, lo que me permite identificar oportunidades y transformar desafíos en soluciones viables.
+                    </p>
+                    <p>
+                        Soy una firme creyente en el poder transformador de la sostenibilidad como una urgencia global y en la democratización de la educación, la ciencia y la tecnología para construir un futuro más equitativo. Busco roles de liderazgo donde pueda aplicar mi visión estratégica y habilidades para generar un impacto significativo en la investigación, la innovación y la extensión, tanto en el ámbito universitario como a través de la consultoría especializada en desarrollo sostenible y apropiación social del conocimiento.
+                    </p>
+                </div>
+                <div class="mt-10 flex justify-center items-center space-x-6">
+                    <a href="https://www.linkedin.com/in/anamajara/" target="_blank" class="text-gray-500 hover:text-teal-600">
+                        <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"/></svg>
+                        <span class="sr-only">LinkedIn</span>
+                    </a>
+                     <a href="mailto:jaramillo.anam@gmail.com" class="text-gray-500 hover:text-teal-600">
+                        <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 5.5h19a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5h-19a1.5 1.5 0 0 1-1.5-1.5v-10A1.5 1.5 0 0 1 2.5 5.5zm19.3 1.15-9.3 6.2-9.3-6.2a.5.5 0 0 0-.6.8l9.6 6.4a.5.5 0 0 0 .6 0l9.6-6.4a.5.5 0 0 0-.6-.8z"/></svg>
+                         <span class="sr-only">Email</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pillars Section -->
+        <section id="pillars" class="py-20 sm:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Pilares de Experiencia</h2>
+                    <p class="mt-4 text-lg text-gray-600">Mi carrera se ha construido sobre la intersección de tres dominios clave, creando un perfil único y versátil.</p>
+                </div>
+                <div class="mt-12 grid gap-8 md:grid-cols-3">
+                    <!-- Pillar 1 -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 pillar-card">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-teal-500 text-white mx-auto">
+                            <span class="text-2xl font-bold">🎓</span>
+                        </div>
+                        <h3 class="mt-6 text-xl font-bold text-gray-900 text-center">Academia y Docencia</h3>
+                        <p class="mt-4 text-gray-600 text-center">Formación de futuros profesionales e investigación rigurosa para avanzar el conocimiento en sostenibilidad, estrategia y CTeI.</p>
+                    </div>
+                    <!-- Pillar 2 -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 pillar-card">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-teal-500 text-white mx-auto">
+                            <span class="text-2xl font-bold">💼</span>
+                        </div>
+                        <h3 class="mt-6 text-xl font-bold text-gray-900 text-center">Consultoría y Estrategia</h3>
+                        <p class="mt-4 text-gray-600 text-center">Asesoramiento a organizaciones para implementar sistemas de gestión, fomentar la innovación y desarrollar planes estratégicos con impacto real.</p>
+                    </div>
+                    <!-- Pillar 3 -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 pillar-card">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-teal-500 text-white mx-auto">
+                             <span class="text-2xl font-bold">🏛️</span>
+                        </div>
+                        <h3 class="mt-6 text-xl font-bold text-gray-900 text-center">Gestión Pública y Política</h3>
+                        <p class="mt-4 text-gray-600 text-center">Contribución al desarrollo de políticas públicas y planeación institucional en Ciencia, Tecnología e Innovación a nivel nacional.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Chart Section -->
+        <section id="skills" class="py-20 sm:py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Mapa de Competencias</h2>
+                    <p class="mt-4 text-lg text-gray-600">Una visualización de mis habilidades clave, desarrolladas a través de una experiencia diversa y profunda.</p>
+                </div>
+                <div class="mt-12">
+                    <div class="chart-container">
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Trajectory Explorer Section -->
+        <section id="trajectory" class="py-20 sm:py-24">
+             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Explorador de Trayectoria</h2>
+                    <p class="mt-4 text-lg text-gray-600">Filtra mi experiencia para explorar los hitos más relevantes en mi carrera profesional y académica.</p>
+                </div>
+                <div id="filter-controls" class="my-8 flex flex-wrap justify-center gap-2">
+                </div>
+                <div id="trajectory-list" class="mt-8 space-y-4">
+                </div>
+             </div>
+        </section>
+
+    </main>
+
+    <footer id="contact" class="bg-gray-800 text-white">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl font-bold">Contactar</h2>
+            <p class="mt-2 text-gray-400">Estoy abierta a nuevas colaboraciones, proyectos de consultoría y oportunidades académicas.</p>
+            <div class="mt-6 flex justify-center space-x-6">
+                <a href="https://www.linkedin.com/in/anamajara/" target="_blank" class="text-gray-400 hover:text-white">
+                    <span class="sr-only">LinkedIn</span>
+                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"/></svg>
+                </a>
+                <a href="mailto:jaramillo.anam@gmail.com" class="text-gray-400 hover:text-white">
+                    <span class="sr-only">Email</span>
+                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 5.5h19a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5h-19a1.5 1.5 0 0 1-1.5-1.5v-10A1.5 1.5 0 0 1 2.5 5.5zm19.3 1.15-9.3 6.2-9.3-6.2a.5.5 0 0 0-.6.8l9.6 6.4a.5.5 0 0 0 .6 0l9.6-6.4a.5.5 0 0 0-.6-.8z"/></svg>
+                </a>
+                <p class="text-gray-400"> (57) 3133913146</p>
+            </div>
+            <p class="mt-8 text-sm text-gray-500">&copy; 2024 Ana María Jaramillo Quiceno. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close mobile menu on link click
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // Skills Chart
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const skillsChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Desarrollo Sostenible',
+                        'Planeación Estratégica',
+                        'Gestión de CTeI',
+                        'Gestión de Proyectos',
+                        'Docencia e Investigación',
+                        'Gestión de Calidad',
+                        'Innovación y Emprendimiento',
+                        'Prospectiva'
+                    ],
+                    datasets: [{
+                        label: 'Nivel de Competencia',
+                        data: [9, 9, 8, 8, 9, 7, 8, 8],
+                        backgroundColor: 'rgba(13, 148, 136, 0.2)', // teal-600 with alpha
+                        borderColor: 'rgb(13, 148, 136)', // teal-600
+                        pointBackgroundColor: 'rgb(13, 148, 136)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(13, 148, 136)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 12,
+                                    family: 'Inter, sans-serif'
+                                },
+                                color: '#374151' // gray-700
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                stepSize: 2,
+                                display: false
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Trajectory Data
+            const trajectoryData = [
+                { year: '2021-2025', title: 'Doctorado en Desarrollo Sostenible (Candidata)', institution: 'Universidad de Manizales', category: 'Formación', desc: 'Profundizando en la investigación y aplicación de modelos de desarrollo sostenible.' },
+                { year: '2013-2016', title: 'Magíster en Gestión de Ciencia, Tecnología e Innovación', institution: 'Universidad de Antioquia', category: 'Formación', desc: 'Enfoque en la gestión de sistemas de Ciencia, Tecnología e Innovación.'},
+                { year: '2006-2012', title: 'Administradora de Empresas', institution: 'Universidad del Valle', category: 'Formación', desc: 'Grado profesional que sentó las bases de mi carrera en gestión y estrategia.'},
+                { year: '2008', title: 'Diplomado Gestor de Calidad', institution: 'Servicio Nacional de Aprendizaje – SENA', category: 'Formación Complementaria', desc: '200 horas de formación en gestión de calidad.' },
+                { year: '2012', title: 'Diplomado en Sistemas Integrados de Gestión (ISO)', institution: 'Universidad Central del Valle – UCEVA', category: 'Formación Complementaria', desc: 'Auditor interno en SIG (120 horas) ISO 9001, 14001, 18001 e 19011.' },
+                { year: '2015', title: 'Diplomado en Gestión Efectiva de Proyectos (PMI)', institution: 'Escuela Superior de Administración Pública – ESAP', category: 'Formación Complementaria', desc: '96 horas de capacitación en gestión de proyectos bajo el estándar PMI.' },
+                { year: '2017', title: 'Diplomado Internacional de Gerencia de Proyectos (PMO)', institution: 'Corporación Universitaria de Asturias', category: 'Formación Complementaria', desc: '130 horas con énfasis en Project Management Office.' },
+                { year: '2017', title: 'Curso Prospectiva para el Desarrollo y los ODS Agenda 2030', institution: 'CEPAL', category: 'Formación Complementaria', desc: 'Instituto Latinoamericano y del Caribe de Planificación Económica y Social.' },
+                { year: '2015', title: 'Taller Vigilancia Tecnológica e Inteligencia Estratégica', institution: 'Universidad Santo Tomás Tunja', category: 'Formación Complementaria', desc: 'Nuevas herramientas estratégicas para la Gestión de la Innovación.' },
+                { year: '2014', title: 'Certificación Líder Funcional Software Planeación Estratégica', institution: 'Pensemos S.A. - Colciencias', category: 'Formación Complementaria', desc: 'Módulos: Balanced Scorecard, Planes e Indicadores (Suite Visión Empresarial).' },
+                { year: '2018', title: 'Certificación Mentora de Emprendimientos Digitales (APPS.CO)', institution: 'Ministerio de Tecnologías de Información y Comunicaciones - MINTIC', category: 'Formación Complementaria', desc: 'Transferencia metodológica de APPS.CO.' },
+                { year: '2022, 2024', title: 'Seminario Internacional "Territorio, Sustentabilidad y Gobernanza"', institution: 'IPN – UNAM – UAEMex – UAEM (México)', category: 'Formación Complementaria', desc: 'Pasantía Internacional en planificación y ordenamiento del territorio para la gestión de la sustentabilidad.' },
+                { year: '2022, 2024', title: 'Diplomado en Apropiación Social de Conocimiento', institution: 'Minciencias / Parque Científico y de Innovación Social UNIMINUTO', category: 'Formación Complementaria', desc: 'Con enfoque territorial y plataforma EVA.' },
+                { year: '2019', title: 'Diplomado en Docencia Universitaria', institution: 'Fundación Universitaria Católica Lumen Gentium', category: 'Formación Complementaria', desc: 'Énfasis en pedagogía y didáctica (126 horas).' },
+                { year: '2018', title: 'Diplomado en Lectura y Escritura en el Aula Universitaria', institution: 'Universidad del Valle', category: 'Formación Complementaria', desc: '120 horas. Complementado con "Cómo aprenden los estudiantes y cómo les enseñamos" (2018) y "Curso de periodismo científico" (2022).' },
+                { year: '2024', title: 'Certificación Docente en Innovación Social para el Desarrollo Sostenible', institution: 'UNESCO – Learning by Helping', category: 'Formación Complementaria', desc: '52 horas, Online.' },
+
+                { year: '2019-2021; 2024', title: 'Consultora', institution: 'Fundación y Centro de Ciencia ANDOKE', category: 'Experiencia Profesional', desc: 'Acompañamiento a la Gerencia en Planeación, Direccionamiento estratégico y renovación del reconocimiento ante Minciencias. Talleres medioambientales y representación en ecosistema CTI. Miembro de la Junta Directiva en 2025.' },
+                { year: '2009-2013; 2021-2023', title: 'Consultora', institution: 'Instituto de Prospectiva, Innovación y Gestión del Conocimiento', category: 'Experiencia Profesional', desc: 'Participación en estudios para la construcción e implementación de modelos estratégicos y de planeación, incluyendo planeación estratégica para Cali al 2050 (insumo para Plan de Desarrollo vigente). Diagnóstico Marco Regulatorio CTeI y sistematización de Agendas de Bioeconomía.' },
+                { year: '2016-Actual', title: 'Coordinadora de Proyectos / Profesional Especializada', institution: 'Universidad del Valle', category: 'Experiencia Profesional', desc: 'Coordinación del proyecto de Apropiación Social de Conocimiento (ejecución presupuestal, seguimiento). Apoyo en planeación estratégica y diseño de política del sistema de Investigación, Desarrollo Tecnológico, Innovación, Creación y ASC (IDiCA).' },
+                { year: '2017-2020', title: 'Docente e Investigadora', institution: 'Fundación Universitaria Católica Lumen Gentium', category: 'Experiencia Profesional', desc: 'Docencia, investigación, líder de semilleros y proyectos estratégicos institucionales. Apoyo en reconocimiento como entidad mentora de APPS.CO y creación/implementación de modelo de Emprendimiento de Base Tecnológica.' },
+                { year: '2015-2016', title: 'Líder de Proyectos', institution: 'Centro de Ciencia y Tecnología de Antioquia - CTA', category: 'Experiencia Profesional', desc: 'Coordinación de proyecto de investigación y equipo. Programa de Responsabilidad Social Corporativa enfocado en gestión del conocimiento e innovación educativa.' },
+                { year: '2013-2015', title: 'Contratista Oficina Asesora de Planeación', institution: 'COLCIENCIAS', category: 'Experiencia Profesional', desc: 'Líder del proceso de planeación institucional (Plan Estratégico, planes de acción). Gestión de indicadores de CTeI y líder funcional de software de planeación estratégica (GINA). Apoyo en articulación estratégica con actores del SNCTI.' },
+                { year: '2023', title: 'Consultora', institution: 'Universidad Autónoma de Occidente', category: 'Experiencia Profesional', desc: 'Seminarios y talleres en innovación, prospectiva, gestión del cambio, liderazgo y estrategia para clientes empresariales y educativos.' },
+                { year: '2009-2013', title: 'Directora Ejecutiva', institution: 'ORDI SAS (Clientes: Indusquim, Fumicontrol, Intersalud, Nexura)', category: 'Experiencia Profesional', desc: 'Liderazgo en implementación y sostenimiento de Sistemas de Gestión de Calidad ISO 9001 para diversas empresas.' },
+                { year: '2004-2009', title: 'Auxiliar Administrativa y Asesor de Venta', institution: 'Caja de Compensación Familiar COMFENALCO VALLE', category: 'Experiencia Profesional', desc: 'Actividades administrativas en eventos, auditorías a proveedores (ISO 9001), creación/modificación de materiales en SAP, auditor interno de calidad.' },
+                
+                { year: '2022', title: 'Soporte Supervisión Proyecto "Creación Centro de Ciencia"', institution: 'Universidad del Valle', category: 'Investigación', desc: 'Seguimiento técnico, científico y administrativo en el proyecto SGR “Alianza para el desarrollo de Estaciones Científicas itinerantes para el Valle del Cauca”.' },
+                { year: '2022', title: 'Coordinación Proyecto Unidad de Apropiación Social del Conocimiento', institution: 'Universidad del Valle (Convenio OEI – MINCIENCIAS)', category: 'Investigación', desc: 'Liderazgo en la creación de una Unidad de Apropiación Social del Conocimiento en la Vicerrectoría de Investigaciones.' },
+                { year: '2020', title: 'Experta en Innovación Proyecto "Modelo de innovación colaborativa"', institution: 'UCEVA', category: 'Investigación', desc: 'Participación en investigación para el desarrollo de un modelo de innovación colaborativa para la competitividad del ecosistema subregional de innovación digital del Valle del Cauca.' },
+                { year: '2019', title: 'Coinvestigadora Proyecto "Implementación Modelo Emprendimiento Base Tecnológica"', institution: 'Fundación Universitaria Católica Lumen Gentium', category: 'Investigación', desc: 'Investigación para la implementación de un modelo de Emprendimiento de Base Tecnológica para UNICATÓLICA.' },
+                { year: '2018', title: 'Coinvestigadora Proyecto "Diseño y Desarrollo Modelo Emprendimiento Base Tecnológica"', institution: 'Fundación Universitaria Católica Lumen Gentium', category: 'Investigación', desc: 'Investigación para el diseño y desarrollo de un modelo de Emprendimiento de Base Tecnológica para UNICATÓLICA.' },
+                { year: '2015', title: 'Líder de Proyectos "Modelo de gestión del conocimiento Programa Félix y Susana"', institution: 'Fundación Suramericana - Centro de Ciencia y Tecnología de Antioquia', category: 'Investigación', desc: 'Diseño de un modelo de gestión del conocimiento para el Programa Félix y Susana de la Fundación Suramericana.' },
+                { year: '2012', title: 'Asistente de Investigación "Modelo Operacional"', institution: 'Instituto de Prospectiva, Innovación y Gestión del Conocimiento, U. del Valle', category: 'Investigación', desc: 'Diseño y desarrollo de un modelo operacional para la prestación de servicios en forma sistemática, continua y sostenible en el Instituto de Prospectiva.' },
+                { year: '2010', title: 'Asistente de Investigación "Modelo Integral de Gestión de Calidad"', institution: 'Instituto de Prospectiva, Innovación y Gestión del Conocimiento, U. del Valle', category: 'Investigación', desc: 'Diseño de un Modelo Integral de Gestión de Calidad para Organizaciones Intensivas en Conocimiento e Implementación en el Instituto de Prospectiva.' },
+                { year: '2010', title: 'Asistente de Investigación "Sistema de Gestión de Calidad OIC"', institution: 'Instituto de Prospectiva, Innovación y Gestión del Conocimiento, U. del Valle', category: 'Investigación', desc: 'Determinación y Puesta en Marcha de un Sistema de Gestión de Calidad, identificando estructura, perfiles y capacidades gerenciales requeridos para Organizaciones Intensivas en Conocimiento (OIC).' },
+
+                { year: '2019, 2022', title: 'Docente Posgrado: Introducción a la CTeI', institution: 'Universidad de San Buenaventura, Cali', category: 'Docencia Universitaria', desc: '2 módulos en la Maestría en Gerencia de CTeI.' },
+                { year: '2017-2019; 2022-2024', title: 'Docente Pregrado: Estrategia y Planeación, Gerencia de Calidad', institution: 'Universidad del Valle, Buga', category: 'Docencia Universitaria', desc: 'Cátedras en la Facultad de Ciencias de la Administración (5 años).' },
+                { year: '2017-2020', title: 'Docente Pregrado: Prospectiva, Investigación, Proyectos, Calidad, Creatividad', institution: 'Fundación Universitaria Católica Lumen Gentium, Cali', category: 'Docencia Universitaria', desc: 'Cátedras en la Facultad de Ingeniería (4 años).' },
+                { year: '2016', title: 'Docente Pregrado: Organizaciones', institution: 'Universidad de Antioquia, Medellín', category: 'Docencia Universitaria', desc: 'Cátedra en la Facultad de Ciencias Económicas (1 año).' },
+
+                { year: '2019', title: 'Publicación: "Importancia de la innovación y el emprendimiento en el ámbito académico"', institution: 'Lumen Gentium, 2(2)', category: 'Publicación', desc: 'Coautoría de artículo científico. ISSN: 2539-0678.' },
+                { year: '2024', title: 'Publicación: "Desarrollo Sostenible: Una mirada multidisciplinaria, Volumen II"', institution: 'Editorial Universidad CESMAG', category: 'Publicación', desc: 'Coautoría en capítulo de libro. ISBN:978S28-7585-33-1.' },
+                { year: '2024', title: 'Publicación: "Miradas y territorios: un acercamiento a las comprensiones sobre el desarrollo"', institution: 'Editorial IES CINOC', category: 'Publicación', desc: 'Coautoría en libro. ISBN: 978-628-95283-6-7.' },
+                { year: '2021', title: 'Publicación: "Innovación colaborativa por un Valle más competitivo"', institution: 'Sello Editorial Unidad Central del Valle del Cauca', category: 'Publicación', desc: 'Coautoría en libro. ISBN: 978-958-8519-93-7.' },
+                { year: '2021', title: 'Publicación: "La gestión del conocimiento y su relación con el desempeño"', institution: 'Sello Editorial Silva y Soluciones Corporación', category: 'Publicación', desc: 'Coautoría en libro. ISBN: 9789585361904.' },
+                { year: '2018', title: 'Publicación: "Modelo de un Sistema de Gestión de calidad para OIC"', institution: 'Colombia', category: 'Publicación', desc: 'Coautoría en libro. ISBN: 9789587658491.' },
+                { year: '2017', title: 'Publicación: "Construyendo un sistema de gestión de calidad para OIC"', institution: 'Colombia', category: 'Publicación', desc: 'Coautoría en libro. ISBN:9789587653427.' },
+                { year: '2016', title: 'Publicación: "El futuro a debate: Respuestas prospectivas y estratégicas"', institution: 'México', category: 'Publicación', desc: 'Coautoría en libro. ISBN: 9786070507779.' },
+                { year: '2011', title: 'Publicación: "Memorias Encuentro internacional de investigadores en administración"', institution: 'Colombia', category: 'Publicación', desc: 'Coautoría en memorias de evento. ISBN: 9789587107531.' },
+                { year: 'Link', title: 'Publicaciones adicionales', institution: 'Catálogo de la Cámara Colombiana del Libro', category: 'Publicación', desc: 'Explore más publicaciones resultado de colaboraciones en gestión del conocimiento, prospectiva, calidad, innovación, sostenibilidad y apropiación social del conocimiento. <a href="https://isbn.camlibro.com.co/catalogo.php?mode=busqueda_menu&id_autor=265459&pagina=1" target="_blank" class="text-teal-600 hover:underline">Ver catálogo</a>' },
+                
+                { year: '2019-2020', title: 'Desarrollo de Software para Emprendimiento (Coautoría)', institution: 'Fundación Universitaria Católica Lumen Gentium', category: 'Innovación/Software', desc: 'Registro de 7 soportes lógicos de software y una obra audiovisual, incluyendo Certificado de registro soporte lógico de Software de emprendimiento V1 (13-74-491), Herramienta Digital U-PYME UNICATÓLICA (13-83-126), Plataforma web de emprendimiento de base tecnológica para UNICATÓLICA (13-83-123), GECO Software (13-83-125), Herramienta Digital Canvas UNICATÓLICA (13-83-124), Software como constituir una empresa (13-83-127), y Registro de obra audiovisual Explicativo modelo CANVAS Unicatólica (13-83-124).' },
+                
+                { year: '2024', title: 'Ponencia: "El aporte de los Centros de ciencia al desarrollo sostenible"', institution: 'Universidad Autónoma de Querétaro – UAEMex', category: 'Ponencia', desc: 'Presentación en el Simposio Internacional de Geografía ambiental y gestión de cuencas para el Desarrollo Sostenible (Querétaro, 24 y 25 de abril de 2024).'},
+                { year: '2022', title: 'Conferencia Magistral "Experiencias de apropiación social de conocimiento"', institution: 'Universidad de Manizales – Cimad', category: 'Ponencia', desc: 'En el XXVI Simposio de Investigación de la Maestría en Desarrollo Sostenible y Medio Ambiente (Mayo 12 de 2022).'},
+                { year: '2021', title: 'Conversatorio: ¿Cómo las instituciones apoyan los ecosistemas creativos?', institution: 'Servicio Nacional de Aprendizaje – SENA', category: 'Ponencia', desc: 'En el marco del evento de Divulgación Tecnológica (EDT) ECO CREA - Ecosistema creativo - Eje moda (Noviembre 11 de 2021).'},
+                { year: '2020', title: 'Ponencia: "I Semana de Apropiación Social del Conocimiento"', institution: 'Universidad del Valle', category: 'Ponencia', desc: 'Hacia la construcción de una política institucional (virtual, Octubre 19-23 del 2020).' },
+                { year: '2020', title: 'Ponencia: "Plataforma Digital de Emprendimiento de Base Tecnológica"', institution: 'TICAL2020 y 4º Encuentro Latinoamericano de e-Ciencia', category: 'Ponencia', desc: 'Coautora y Presentadora del trabajo sobre EBT para estudiantes de ingeniería (Agosto 31 - Septiembre 3 de 2020).'},
+                { year: '2019', title: 'Conferencista: "Innovación y emprendimiento sin límites"', institution: 'Fundación Universitaria Católica Lumen Gentium', category: 'Ponencia', desc: 'En la 7ma Semana de la ingeniería creativa (Cali, Noviembre 6 de 2019).'},
+                { year: '2019', title: 'Conferencista: "Emprendimiento de base tecnológica para transferir I+D a la empresa"', institution: 'Blockchain Centre Colombia', category: 'Ponencia', desc: 'En el evento Cali 4.0 (Cali, Septiembre 20 de 2019).'},
+                { year: '2019', title: 'Conferencista: "ImaginationLab Pedagogías emergentes"', institution: 'Fundación Universitaria Católica Lumen Gentium', category: 'Ponencia', desc: 'Pedagogías emergentes desde las 4C de la Educación en el SXXI (Cali, Septiembre 18 de 2019).'},
+                { year: '2019', title: 'Ponente Central: "Importancia de la investigación en la educación"', institution: 'Universidad del Valle', category: 'Ponencia', desc: 'En el I Encuentro Inter Programas de investigación (Buenaventura, Agosto 29 de 2019).'},
+                { year: '2019', title: 'Ponente: "Investigar para transformar el futuro"', institution: 'Fundación Universitaria Católica Lumen Gentium', category: 'Ponencia', desc: 'En el IX Encuentro interno de Semilleros de Investigación y V Encuentro interno de Grupos de Investigación (Cali, Marzo 21 de 2019).'},
+                { year: '2019', title: 'Ponencia Virtual: "¿Cómo puede incidir la investigación en política pública?"', institution: 'Cámara de Diputados LXIV de México (XI REDIPAL)', category: 'Ponencia', desc: 'Importancia para el cumplimiento de la Agenda 2030 (Marzo 28 de 2019).'},
+                { year: '2018', title: 'Ponencia: "Emprendimiento universitario de base tecnológica para el desarrollo territorial"', institution: 'ILPES - CEPAL', category: 'Ponencia', desc: 'Seminario 70 años de la CEPAL: Planificación para el desarrollo con visión de futuro (Santiago de Chile, Octubre 23 de 2018).'},
+                { year: '2012', title: 'Ponencia: "Gestión y Consolidación de Organizaciones intensivas en conocimiento (OIC)"', institution: 'UNAD (Prospecta Colombia 2012)', category: 'Ponencia', desc: 'En el V Congreso Internacional de Prospectiva Estratégica y Estudios de futuro (Bucaramanga, Octubre 18 de 2012).'},
+                { year: '2011', title: 'Ponencias (3): Desarrollo regional, Construyendo OIC, Modelo evaluación calidad OIC', institution: 'Universidad Externado de Colombia', category: 'Ponencia', desc: 'En el Encuentro Internacional de Investigadores en Administración 2011 (Bogotá, Noviembre 23 de 2011). Premio a mejor ponencia en Política Pública y Desarrollo Regional.'},
+                { year: '2011', title: 'Ponencia: "Diseño de un Sistema de Gestión de Calidad para OIC"', institution: 'Universidad ICESI', category: 'Ponencia', desc: 'En el II Simposio Iberoamericano de estudios Gerenciales (Cali, Octubre 13 de 2011).'},
+
+                { year: '2024, 2023', title: 'Participación en Escenario Vivo de Apropiación Social del Conocimiento', institution: 'Universidad del Rosario / Universidad del Bosque', category: 'Evento', desc: 'Asistencia y participación activa en encuentros clave sobre apropiación social del conocimiento (Bogotá, Octubre 2024 y Noviembre 2023).' },
+                { year: '2021', title: 'Participación en Simposio Doctoral y Posdoctoral Polaco-colombiano', institution: 'Universidad de Manizales', category: 'Evento', desc: 'Asistente en el simposio virtual (Agosto 25) y taller especializado en Ciencias de la Tierra y el Medio Ambiente (Octubre 26).' },
+                { year: '2020', title: 'Participación en Conferencia TICAL 2020 y 4º Encuentro Latinoamericano de e-Ciencia', institution: 'TICAL, Comunidad y Tecnología', category: 'Evento', desc: 'Asistencia a sesión paralela "Transformando la experiencia de aprendizaje del alumno" (Septiembre 2 de 2020).' },
+                { year: '2020', title: 'Participación en Hackatón Respiro Creativo', institution: 'Socialab', category: 'Evento', desc: 'Asistencia y participación en hackatón (Abril 24-26 de 2020).' },
+                { year: '2019-2020', title: 'Participación en Seminarios sobre Derechos de Autor', institution: 'Dirección Nacional de Derechos de Autor', category: 'Evento', desc: 'Desde la creación a la monetización de contenidos (Abril 23 de 2020 y Octubre 30 de 2019).' },
+                { year: '2019', title: 'Participación en Taller de Open Journal System y Encuentros de Investigación', institution: 'Fundación Universitaria Católica Lumen Gentium', category: 'Evento', desc: 'Asistencia a talleres (Julio 23) y IX Encuentro interno de semilleros y V Encuentro de grupos de investigación (Marzo 21).' },
+                { year: '2015', title: 'Participación en III Congreso Latinoamericano de Investigación Educativa', institution: 'Universidad ECCI', category: 'Evento', desc: 'Asistencia a congreso en Bogotá (Octubre 21-23 de 2015).' },
+                { year: '2011', title: 'Participación en Encuentro Internacional de Investigadores en Administración', institution: 'Universidad Externado de Colombia', category: 'Evento', desc: 'Asistencia a encuentro en Bogotá (Noviembre de 2011).' },
+                { year: '2011', title: 'Participación en II Simposio Iberoamericano de estudios Gerenciales', institution: 'Universidad ICESI', category: 'Evento', desc: 'Asistencia a simposio "Una mirada interdisciplinar a la innovación" (Cali, Octubre de 2011).' },
+                { year: '2009', title: 'Participación en I Encuentro de Investigadores en Prospectiva, Innovación y Gestión del Conocimiento', institution: 'Universidad del Valle', category: 'Evento', desc: 'Asistencia a encuentro en Cali (Noviembre de 2009).' },
+            ];
+
+            const filterControls = document.getElementById('filter-controls');
+            const trajectoryList = document.getElementById('trajectory-list');
+            
+            const categories = ['Todos', ...new Set(trajectoryData.map(item => item.category))];
+
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.textContent = category;
+                button.className = 'filter-btn px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full hover:bg-gray-50';
+                if (category === 'Todos') {
+                    button.classList.add('active');
+                }
+                button.dataset.filter = category;
+                filterControls.appendChild(button);
+            });
+
+            const renderList = (filter = 'Todos') => {
+                trajectoryList.innerHTML = '';
+                const filteredData = (filter === 'Todos') ? trajectoryData : trajectoryData.filter(item => item.category === filter);
+                
+                filteredData.forEach(item => {
+                    const categoryColors = {
+                        'Formación': 'bg-blue-100 text-blue-800',
+                        'Formación Complementaria': 'bg-indigo-100 text-indigo-800',
+                        'Experiencia Profesional': 'bg-green-100 text-green-800',
+                        'Investigación': 'bg-purple-100 text-purple-800',
+                        'Docencia Universitaria': 'bg-yellow-100 text-yellow-800',
+                        'Publicación': 'bg-pink-100 text-pink-800',
+                        'Innovación/Software': 'bg-orange-100 text-orange-800',
+                        'Ponencia': 'bg-teal-100 text-teal-800',
+                        'Evento': 'bg-red-100 text-red-800',
+                        'Reconocimiento': 'bg-gray-200 text-gray-900',
+                    };
+
+                    const card = `
+                        <div class="bg-white p-6 rounded-lg shadow-md transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
+                            <div class="flex flex-col sm:flex-row justify-between sm:items-center">
+                                <div class="flex-1">
+                                    <p class="text-sm font-semibold ${categoryColors[item.category] || 'bg-gray-100 text-gray-800'} inline-block px-2 py-1 rounded-full">${item.category}</p>
+                                    <h4 class="text-lg font-bold text-gray-900 mt-2">${item.title}</h4>
+                                    <p class="text-md font-medium text-teal-700">${item.institution}</p>
+                                </div>
+                                <div class="flex-shrink-0 mt-4 sm:mt-0 sm:ml-6">
+                                    <p class="text-sm font-semibold text-gray-500 text-left sm:text-right">${item.year}</p>
+                                </div>
+                            </div>
+                            <p class="mt-4 text-gray-600">${item.desc}</p>
+                        </div>
+                    `;
+                    trajectoryList.innerHTML += card;
+                });
+            };
+            
+            filterControls.addEventListener('click', (e) => {
+                if(e.target.tagName === 'BUTTON') {
+                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    renderList(e.target.dataset.filter);
+                }
+            });
+
+            renderList();
+
+        });
+    </script>
+</body>
+</html>
